@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum MapState
@@ -12,7 +11,6 @@ public enum MapState
 
 // TODO: implement isMapCompletedProperly
 // TODO: get rid of switch in Update
-// TODO: implement ClearPath method
 public class MapView : MonoBehaviour, IMapView
 {
     [SerializeField]
@@ -21,6 +19,7 @@ public class MapView : MonoBehaviour, IMapView
     private Vector2Int mapSize;
     private Vector2Int startPoint;
     private Vector2Int goalPoint;
+    private List<Vector2Int> path;
 
     private const float outlineWidthInPersent = .05f;
 
@@ -96,14 +95,19 @@ public class MapView : MonoBehaviour, IMapView
 
     public void ClearPath()
     {
-        throw new NotImplementedException();
+        foreach (Vector2Int v in path)
+        {
+            ChangeCellColor(v, colorSet.walkableColor);
+        }
+        path = null;
     }
 
     public void DrawPath(List<Vector2Int> path)
     {
+        this.path = path;
         foreach (Vector2Int v in path)
         {
-            mapRenderers[v.x, v.y].material.color = colorSet.pathColor;
+            ChangeCellColor(v, colorSet.pathColor);
         }
     }
 
