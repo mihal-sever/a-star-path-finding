@@ -9,7 +9,6 @@ public enum MapState
 }
 
 
-// TODO: implement isMapCompletedProperly
 // TODO: get rid of switch in Update
 public class MapView : MonoBehaviour, IMapView
 {
@@ -17,8 +16,8 @@ public class MapView : MonoBehaviour, IMapView
     private GameObject cellPrefab;
 
     private Vector2Int mapSize;
-    private Vector2Int startPoint;
-    private Vector2Int goalPoint;
+    private Vector2Int? startPoint;
+    private Vector2Int? goalPoint;
     private List<Vector2Int> path;
 
     private const float outlineWidthInPersent = .05f;
@@ -36,7 +35,7 @@ public class MapView : MonoBehaviour, IMapView
     {
         cam = Camera.main;
         state = MapState.EditMap;
-        mapSize = new Vector2Int(50, 50);
+        mapSize = new Vector2Int(10, 10);
         CreateMapColorSet();
     }
 
@@ -63,9 +62,9 @@ public class MapView : MonoBehaviour, IMapView
     
     public Vector2Int GetMapSize() => mapSize;
 
-    public Vector2Int GetStartPoint() => startPoint;
+    public Vector2Int GetStartPoint() => startPoint.Value;
 
-    public Vector2Int GetGoalPoint() => goalPoint;
+    public Vector2Int GetGoalPoint() => goalPoint.Value;
 
     public int[,] GetGrid()
     {
@@ -85,7 +84,9 @@ public class MapView : MonoBehaviour, IMapView
 
     public bool IsMapCompleted()
     {
-        return startPoint != Vector2Int.zero && goalPoint != Vector2Int.zero;
+        return startPoint.HasValue && goalPoint.HasValue &&
+                (GetCellColor(startPoint.Value) == colorSet.startPointColor) &&
+                (GetCellColor(goalPoint.Value) == colorSet.goalPointColor);
     }
     
     public void ChangeState(MapState state)
@@ -113,8 +114,8 @@ public class MapView : MonoBehaviour, IMapView
 
     public void ClearMap()
     {
-        startPoint = Vector2Int.zero;
-        goalPoint = Vector2Int.zero;
+        startPoint = null;
+        goalPoint = null;
         path = null;
 
         for (int x = 0; x < mapSize.x; x++)
@@ -141,15 +142,15 @@ public class MapView : MonoBehaviour, IMapView
 
             prevHit = hit.transform;
             Vector2Int cell = GetCellCoordinates(hit.point);
-
-            if (mapRenderers[cell.y, cell.x].material.color == colorSet.obstacleColor)
+            
+            if (GetCellColor(cell) == colorSet.obstacleColor)
                 ChangeCellColor(cell, colorSet.walkableColor);
-            else
+            else 
                 ChangeCellColor(cell, colorSet.obstacleColor);
         }
     }
     
-    private void EditPoint(ref Vector2Int point, Color color)
+    private void EditPoint(ref Vector2Int? point, Color color)
     {
         if (!Input.GetMouseButtonDown(0))
             return;
@@ -159,23 +160,24 @@ public class MapView : MonoBehaviour, IMapView
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            if (point != Vector2Int.zero)
-                ChangeCellColor(point, colorSet.walkableColor);
+            if (point.HasValue && GetCellColor(point.Value) == color)
+            {
+                ChangeCellColor(point.Value, colorSet.walkableColor);
+            }
 
             point = GetCellCoordinates(hit.point);
-            ChangeCellColor(point, color);
+            ChangeCellColor(point.Value, color);
         }
     }
     
     private void GenerateMap()
     {
         mapRenderers = new Renderer[mapSize.x, mapSize.y];
-
         for (int x = 0; x < mapRenderers.GetLength(0); x++)
         {
             for (int y = 0; y < mapRenderers.GetLength(1); y++)
             {
-                Vector3 cellPosition = new Vector3(y, 0, x);
+                Vector3 cellPosition = new Vector3(x, 0, y);
                 Transform cell = Instantiate(cellPrefab, cellPosition, Quaternion.Euler(Vector3.right * 90), transform).transform;
                 cell.localScale = Vector3.one * (1 - outlineWidthInPersent);
                 cell.name = x + " " + y;
@@ -187,8 +189,12 @@ public class MapView : MonoBehaviour, IMapView
     
     private void ChangeCellColor(Vector2Int cellCoordinates, Color color)
     {
-        Renderer rend = mapRenderers[cellCoordinates.y, cellCoordinates.x];
-        rend.material.color = color;
+        mapRenderers[cellCoordinates.x, cellCoordinates.y].material.color = color;
+    }
+
+    private Color GetCellColor(Vector2Int cellCoordinates)
+    {
+        return mapRenderers[cellCoordinates.x, cellCoordinates.y].material.color;
     }
 
     private Vector2Int GetCellCoordinates(Vector3 cellWorldPosition)
