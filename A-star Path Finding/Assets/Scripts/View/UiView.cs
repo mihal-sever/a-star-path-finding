@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UiView : MonoBehaviour, IUiView
 {
     [SerializeField]
-    private Button editMapButton;
+    private Button editObstaclesButton;
     [SerializeField]
     private Button editStartPointButton;
     [SerializeField]
@@ -19,7 +19,7 @@ public class UiView : MonoBehaviour, IUiView
     [SerializeField]
     private MessagePanel messagePanel;
 
-    public event Action OnEditMapPressed;
+    public event Action OnEditObstaclesPressed;
     public event Action OnEditStartPointPressed;
     public event Action OnEditGoalPointPressed;
     public event Action OnFindPathPressed;
@@ -28,7 +28,7 @@ public class UiView : MonoBehaviour, IUiView
 
     private void Awake()
     {
-        editMapButton.onClick.AddListener(()=>OnEditMapPressed?.Invoke());
+        editObstaclesButton.onClick.AddListener(()=>OnEditObstaclesPressed?.Invoke());
         editStartPointButton.onClick.AddListener(() => OnEditStartPointPressed?.Invoke());
         editGoalPointButton.onClick.AddListener(() => OnEditGoalPointPressed?.Invoke());
         findPathButton.onClick.AddListener(() => OnFindPathPressed?.Invoke());
@@ -50,7 +50,7 @@ public class UiView : MonoBehaviour, IUiView
 
     public void EnableCleanPath()
     {
-        editMapButton.interactable = false;
+        editObstaclesButton.interactable = false;
         editStartPointButton.interactable = false;
         editGoalPointButton.interactable = false;
         findPathButton.interactable = false;
@@ -71,7 +71,7 @@ public class UiView : MonoBehaviour, IUiView
 
     private void ResetUiView()
     {
-        editMapButton.interactable = true;
+        editObstaclesButton.interactable = true;
         editStartPointButton.interactable = true;
         editGoalPointButton.interactable = true;
         findPathButton.interactable = true;

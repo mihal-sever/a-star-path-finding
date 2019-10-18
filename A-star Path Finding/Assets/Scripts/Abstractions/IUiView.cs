@@ -2,7 +2,7 @@
 
 public interface IUiView
 {
-    event Action OnEditMapPressed;
+    event Action OnEditObstaclesPressed;
     event Action OnEditStartPointPressed;
     event Action OnEditGoalPointPressed;
     event Action OnFindPathPressed;

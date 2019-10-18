@@ -14,7 +14,7 @@ public abstract class GameControllerBase
         this.uiView = uiView;
 
         uiView.OnFindPathPressed += OnFindPathPressed;
-        uiView.OnEditMapPressed += OnEditMapPressed;
+        uiView.OnEditObstaclesPressed += OnEditObstaclesPressed;
         uiView.OnEditStartPointPressed += OnEditStartPointPressed;
         uiView.OnEditGoalPointPressed += OnEditGoalPointPressed;
         uiView.OnClearPathPressed += OnClearPathPressed;
@@ -59,9 +59,9 @@ public abstract class GameControllerBase
         view.DrawPath(unityPath);
     }
 
-    protected virtual void OnEditMapPressed()
+    protected virtual void OnEditObstaclesPressed()
     {
-        view.ChangeState(MapState.EditMap);
+        view.ChangeState(MapState.EditObstacles);
     }
 
     protected virtual void OnEditStartPointPressed()

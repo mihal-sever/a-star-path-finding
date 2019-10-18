@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum MapState
 {
-    EditMap,
+    EditObstacles,
     EditStartPoint,
     EditGoalPoint
 }
@@ -34,7 +34,7 @@ public class MapView : MonoBehaviour, IMapView
     private void Awake()
     {
         cam = Camera.main;
-        state = MapState.EditMap;
+        state = MapState.EditObstacles;
         mapSize = new Vector2Int(10, 10);
         CreateMapColorSet();
     }
@@ -48,8 +48,8 @@ public class MapView : MonoBehaviour, IMapView
     {
         switch (state)
         {
-            case MapState.EditMap:
-                EditMap();
+            case MapState.EditObstacles:
+                EditObstacles();
                 break;
             case MapState.EditStartPoint:
                 EditPoint(ref startPoint, colorSet.startPointColor);
@@ -127,21 +127,19 @@ public class MapView : MonoBehaviour, IMapView
         }
     }
 
-    private void EditMap()
+    private void EditObstacles()
     {
         if (!Input.GetMouseButton(0))
             return;
-
-        var pos = Input.mousePosition;
-        var ray = cam.ScreenPointToRay(new Vector3(pos.x, pos.y, 0));
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        
+        RaycastHit? hit = GetHit();
+        if (hit.HasValue)
         {
-            if (prevHit == hit.transform)
+            if (prevHit == hit.Value.transform)
                 return;
 
-            prevHit = hit.transform;
-            Vector2Int cell = GetCellCoordinates(hit.point);
+            prevHit = hit.Value.transform;
+            Vector2Int cell = GetCellCoordinates(hit.Value.point);
             
             if (GetCellColor(cell) == colorSet.obstacleColor)
                 ChangeCellColor(cell, colorSet.walkableColor);
@@ -154,22 +152,31 @@ public class MapView : MonoBehaviour, IMapView
     {
         if (!Input.GetMouseButtonDown(0))
             return;
-
-        var pos = Input.mousePosition;
-        var ray = cam.ScreenPointToRay(new Vector3(pos.x, pos.y, 0));
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        
+        RaycastHit? hit = GetHit();
+        if (hit.HasValue)
         {
             if (point.HasValue && GetCellColor(point.Value) == color)
             {
                 ChangeCellColor(point.Value, colorSet.walkableColor);
             }
 
-            point = GetCellCoordinates(hit.point);
+            point = GetCellCoordinates(hit.Value.point);
             ChangeCellColor(point.Value, color);
         }
     }
-    
+
+    private RaycastHit? GetHit()
+    {
+        var pos = Input.mousePosition;
+        var ray = cam.ScreenPointToRay(new Vector3(pos.x, pos.y, 0));
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+            return hit;
+        return null;
+    }
+
     private void GenerateMap()
     {
         mapRenderers = new Renderer[mapSize.x, mapSize.y];
