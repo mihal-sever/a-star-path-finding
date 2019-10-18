@@ -11,4 +11,5 @@ public interface IMapView
     void ChangeState(MapState state);
     void ClearPath();
     void DrawPath(List<Vector2Int> path);
+    void ClearMap();
 }

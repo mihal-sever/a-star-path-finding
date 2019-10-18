@@ -18,6 +18,7 @@ public abstract class GameControllerBase
         uiView.OnEditStartPointPressed += OnEditStartPointPressed;
         uiView.OnEditGoalPointPressed += OnEditGoalPointPressed;
         uiView.OnClearPathPressed += OnClearPathPressed;
+        uiView.OnClearMapPressed += OnClearMapPressed;
     }
 
     protected virtual void OnFindPathPressed()
@@ -42,6 +43,10 @@ public abstract class GameControllerBase
         view.ClearPath();
     }
 
+    protected virtual void OnClearMapPressed()
+    {
+        view.ClearMap();
+    }
     protected virtual void OnPathChanged(List<Point> path)
     {
         if (path == null)

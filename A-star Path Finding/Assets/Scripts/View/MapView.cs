@@ -111,6 +111,21 @@ public class MapView : MonoBehaviour, IMapView
         }
     }
 
+    public void ClearMap()
+    {
+        startPoint = Vector2Int.zero;
+        goalPoint = Vector2Int.zero;
+        path = null;
+
+        for (int x = 0; x < mapSize.x; x++)
+        {
+            for (int y = 0; y < mapSize.y; y++)
+            {
+                ChangeCellColor(new Vector2Int(x, y), colorSet.walkableColor);
+            }
+        }
+    }
+
     private void EditMap()
     {
         if (!Input.GetMouseButton(0))
