@@ -1,14 +1,19 @@
 ﻿public class GameController : GameControllerBase
 {
-    public GameController(IMapView view, IUiView uiView) : base(view, uiView)
-    { }
+    IPathFinder pathFinder;
 
-    protected override IMapModel CreateMap()
+    public GameController(IMapView view, IUiView uiView, IMapModel mapModel, IPathFinder pathFinder) : base(view, uiView)
     {
-        Point mapSize = ConvertToPoint(view.GetMapSize());
-        Point startPoint = ConvertToPoint(view.GetStartPoint());
-        Point goalPoint = ConvertToPoint(view.GetGoalPoint());
-        int[,] grid = view.GetGrid();
+        base.mapModel = mapModel;
+        this.pathFinder = pathFinder;
+    }
+
+    protected override void SetupMapModel()
+    {
+        Point mapSize = ConvertToPoint(mapView.GetMapSize());
+        Point startPoint = ConvertToPoint(mapView.GetStartPoint());
+        Point goalPoint = ConvertToPoint(mapView.GetGoalPoint());
+        int[,] grid = mapView.GetGrid();
 
         Node[,] mapGrid = new Node[grid.GetLength(0), grid.GetLength(1)];
         for (int x = 0; x < grid.GetLength(0); x++)
@@ -19,11 +24,6 @@
             }
         }
 
-        return new MapModel(mapGrid, startPoint, goalPoint, GetPathFinder());
-    }
-
-    protected override IPathFinder GetPathFinder()
-    {
-        return new AStarPathFinder();
+        mapModel.SetupMapModel(mapGrid, startPoint, goalPoint, pathFinder);
     }
 }

@@ -13,6 +13,6 @@ public class GameFactory : MonoBehaviour
         if (mapView == null || uiView == null)
             Application.Quit();
 
-        controller = new GameController(mapView, uiView);
+        controller = new GameController(mapView, uiView, new MapModel(), new AStarPathFinder());
     }
 }

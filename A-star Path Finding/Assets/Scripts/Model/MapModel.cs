@@ -21,7 +21,7 @@ public class MapModel : IMapModel
         }
     }
     
-    public MapModel(Node[,] grid, Point startPoint, Point goalPoint, IPathFinder pathFinder)
+    public void SetupMapModel(Node[,] grid, Point startPoint, Point goalPoint, IPathFinder pathFinder)
     {
         this.grid = grid;
         this.startPoint = startPoint;

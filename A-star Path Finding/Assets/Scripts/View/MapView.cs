@@ -9,7 +9,6 @@ public enum MapState
 }
 
 
-// TODO: get rid of switch in Update
 public class MapView : MonoBehaviour, IMapView
 {
     [SerializeField]
@@ -59,7 +58,12 @@ public class MapView : MonoBehaviour, IMapView
                 break;
         }
     }
-    
+
+    public void ChangeState(MapState state)
+    {
+        this.state = state;
+    }
+
     public Vector2Int GetMapSize() => mapSize;
 
     public Vector2Int GetStartPoint() => startPoint.Value;
@@ -89,9 +93,13 @@ public class MapView : MonoBehaviour, IMapView
                 (GetCellColor(goalPoint.Value) == colorSet.goalPointColor);
     }
     
-    public void ChangeState(MapState state)
+    public void DrawPath(List<Vector2Int> path)
     {
-        this.state = state;
+        this.path = path;
+        foreach (Vector2Int v in path)
+        {
+            ChangeCellColor(v, colorSet.pathColor);
+        }
     }
 
     public void ClearPath()
@@ -101,15 +109,6 @@ public class MapView : MonoBehaviour, IMapView
             ChangeCellColor(v, colorSet.walkableColor);
         }
         path = null;
-    }
-
-    public void DrawPath(List<Vector2Int> path)
-    {
-        this.path = path;
-        foreach (Vector2Int v in path)
-        {
-            ChangeCellColor(v, colorSet.pathColor);
-        }
     }
 
     public void ClearMap()

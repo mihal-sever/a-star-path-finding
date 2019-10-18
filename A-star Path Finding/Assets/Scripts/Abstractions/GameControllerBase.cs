@@ -4,13 +4,13 @@ using UnityEngine;
 
 public abstract class GameControllerBase
 {
-    protected IMapView view;
+    protected IMapView mapView;
     protected IUiView uiView;
-    protected IMapModel model;
+    protected IMapModel mapModel;
 
     protected GameControllerBase(IMapView view, IUiView uiView)
     {
-        this.view = view;
+        this.mapView = view;
         this.uiView = uiView;
 
         uiView.OnFindPathPressed += OnFindPathPressed;
@@ -19,33 +19,31 @@ public abstract class GameControllerBase
         uiView.OnEditGoalPointPressed += OnEditGoalPointPressed;
         uiView.OnClearPathPressed += OnClearPathPressed;
         uiView.OnClearMapPressed += OnClearMapPressed;
+
+        mapModel.OnPathChanged += OnPathChanged;
     }
 
     protected virtual void OnFindPathPressed()
     {
-        if (!view.IsMapCompleted())
+        if (!mapView.IsMapCompleted())
         {
             uiView.ShowMessage("Start and Goal points should be set.");
             return;
         }
         uiView.EnableCleanPath();
-
-        if (model == null)
-        {
-            model = CreateMap();
-            model.OnPathChanged += OnPathChanged;
-        }
-        model.FindPath();
+        
+        SetupMapModel();
+        mapModel.FindPath();
     }
 
     protected virtual void OnClearPathPressed()
     {
-        view.ClearPath();
+        mapView.ClearPath();
     }
 
     protected virtual void OnClearMapPressed()
     {
-        view.ClearMap();
+        mapView.ClearMap();
     }
     protected virtual void OnPathChanged(List<Point> path)
     {
@@ -56,27 +54,25 @@ public abstract class GameControllerBase
         }
 
         List<Vector2Int> unityPath = path.Select(p => ConvertToVector2Int(p)).ToList();
-        view.DrawPath(unityPath);
+        mapView.DrawPath(unityPath);
     }
 
     protected virtual void OnEditObstaclesPressed()
     {
-        view.ChangeState(MapState.EditObstacles);
+        mapView.ChangeState(MapState.EditObstacles);
     }
 
     protected virtual void OnEditStartPointPressed()
     {
-        view.ChangeState(MapState.EditStartPoint);
+        mapView.ChangeState(MapState.EditStartPoint);
     }
 
     protected virtual void OnEditGoalPointPressed()
     {
-        view.ChangeState(MapState.EditGoalPoint);
+        mapView.ChangeState(MapState.EditGoalPoint);
     }
 
-    protected abstract IMapModel CreateMap();
-
-    protected abstract IPathFinder GetPathFinder();
+    protected abstract void SetupMapModel();
 
     protected Point ConvertToPoint(Vector2Int vector)
     {
