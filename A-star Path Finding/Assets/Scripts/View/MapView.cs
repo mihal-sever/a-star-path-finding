@@ -130,7 +130,10 @@ public class MapView : MonoBehaviour, IMapView
     private void EditObstacles()
     {
         if (!Input.GetMouseButton(0))
+        {
+            prevHit = null;
             return;
+        }
         
         RaycastHit? hit = GetHit();
         if (hit.HasValue)
@@ -140,10 +143,10 @@ public class MapView : MonoBehaviour, IMapView
 
             prevHit = hit.Value.transform;
             Vector2Int cell = GetCellCoordinates(hit.Value.point);
-            
+
             if (GetCellColor(cell) == colorSet.obstacleColor)
                 ChangeCellColor(cell, colorSet.walkableColor);
-            else 
+            else
                 ChangeCellColor(cell, colorSet.obstacleColor);
         }
     }
