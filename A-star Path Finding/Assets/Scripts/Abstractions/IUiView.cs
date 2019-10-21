@@ -11,4 +11,5 @@ public interface IUiView
 
     void ShowMessage(string message);
     void EnableCleanPath();
+    void ResetUiView();
 }

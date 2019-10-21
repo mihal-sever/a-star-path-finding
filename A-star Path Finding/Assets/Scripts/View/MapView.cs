@@ -96,17 +96,18 @@ public class MapView : MonoBehaviour, IMapView
     public void DrawPath(List<Vector2Int> path)
     {
         this.path = path;
-        foreach (Vector2Int v in path)
+
+        for (int i = 1; i < path.Count - 1; i++)
         {
-            ChangeCellColor(v, colorSet.pathColor);
+            ChangeCellColor(path[i], colorSet.pathColor);
         }
     }
 
     public void ClearPath()
     {
-        foreach (Vector2Int v in path)
+        for (int i = 1; i < path.Count - 1; i++)
         {
-            ChangeCellColor(v, colorSet.walkableColor);
+            ChangeCellColor(path[i], colorSet.walkableColor);
         }
         path = null;
     }
