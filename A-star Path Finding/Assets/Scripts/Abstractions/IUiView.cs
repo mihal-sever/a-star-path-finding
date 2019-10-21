@@ -8,6 +8,7 @@ public interface IUiView
     event Action OnFindPathPressed;
     event Action OnClearPathPressed;
     event Action OnClearMapPressed;
+    event Action OnSaveMapPressed;
 
     void ShowMessage(string message);
     void EnableCleanPath();

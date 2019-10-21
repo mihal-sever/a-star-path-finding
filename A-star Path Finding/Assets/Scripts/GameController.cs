@@ -2,12 +2,10 @@
 {
     IPathFinder pathFinder;
 
-    public GameController(IMapView view, IUiView uiView, IMapModel mapModel, IPathFinder pathFinder) : base(view, uiView)
+    public GameController(IMapView view, IUiView uiView, IMapModel mapModel, IPathFinder pathFinder, IMapSaver mapSaver) 
+        : base(view, uiView, mapModel, mapSaver)
     {
-        base.mapModel = mapModel;
         this.pathFinder = pathFinder;
-
-        mapModel.OnPathChanged += OnPathChanged;
     }
 
     protected override void SetupMapModel()

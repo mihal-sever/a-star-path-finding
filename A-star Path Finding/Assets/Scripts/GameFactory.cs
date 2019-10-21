@@ -14,6 +14,6 @@ public class GameFactory : MonoBehaviour
         if (mapView == null || uiView == null)
             Application.Quit();
 
-        controller = new GameController(mapView, uiView, new MapModel(), new AStarPathFinder());
+        controller = new GameController(mapView, uiView, new MapModel(), new AStarPathFinder(), new MapSaver());
     }
 }

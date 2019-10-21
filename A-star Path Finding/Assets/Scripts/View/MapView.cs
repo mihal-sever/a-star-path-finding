@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum MapState
@@ -11,6 +12,8 @@ public enum MapState
 
 public class MapView : MonoBehaviour, IMapView
 {
+    public event Action onStart;
+
     [SerializeField]
     private GameObject cellPrefab;
 
@@ -19,7 +22,7 @@ public class MapView : MonoBehaviour, IMapView
     private Vector2Int? goalPoint;
     private List<Vector2Int> path;
 
-    private const float outlineWidthInPersent = .05f;
+    private const float outlineWidthInPersent = .08f;
 
     private MapState state;
 
@@ -34,13 +37,14 @@ public class MapView : MonoBehaviour, IMapView
     {
         cam = Camera.main;
         state = MapState.EditObstacles;
-        mapSize = new Vector2Int(10, 10);
+        mapSize = new Vector2Int(50, 50);
         CreateMapColorSet();
     }
 
     private void Start()
     {
         GenerateMap();
+        onStart();
     }
 
     private void Update()
@@ -125,6 +129,25 @@ public class MapView : MonoBehaviour, IMapView
                 ChangeCellColor(new Vector2Int(x, y), colorSet.walkableColor);
             }
         }
+    }
+
+    public void DrawLoadedMap(int[,] grid, Vector2Int startPoint, Vector2Int goalPoint)
+    {
+        for (int x = 0; x < grid.GetLength(0) && x < mapRenderers.GetLength(0); x++)
+        {
+            for (int y = 0; y < grid.GetLength(1) && y < mapRenderers.GetLength(1); y++)
+            {
+                if (grid[x, y] == int.MaxValue)
+                    ChangeCellColor(new Vector2Int(x, y), colorSet.obstacleColor);
+                else
+                    ChangeCellColor(new Vector2Int(x, y), colorSet.walkableColor);
+            }
+        }
+        this.startPoint = startPoint;
+        this.goalPoint = goalPoint;
+
+        ChangeCellColor(startPoint, colorSet.startPointColor);
+        ChangeCellColor(goalPoint, colorSet.goalPointColor);
     }
 
     private void EditObstacles()

@@ -17,6 +17,8 @@ public class UiView : MonoBehaviour, IUiView
     [SerializeField]
     private Button clearMapButton;
     [SerializeField]
+    private Button saveMapButton;
+    [SerializeField]
     private MessagePanel messagePanel;
 
     public event Action OnEditObstaclesPressed;
@@ -25,6 +27,7 @@ public class UiView : MonoBehaviour, IUiView
     public event Action OnFindPathPressed;
     public event Action OnClearPathPressed;
     public event Action OnClearMapPressed;
+    public event Action OnSaveMapPressed;
 
     private void Awake()
     {
@@ -34,6 +37,7 @@ public class UiView : MonoBehaviour, IUiView
         findPathButton.onClick.AddListener(() => OnFindPathPressed?.Invoke());
         clearPathButton.onClick.AddListener(OnClearPath);
         clearMapButton.onClick.AddListener(OnClearMap);
+        saveMapButton.onClick.AddListener(() => OnSaveMapPressed?.Invoke());
 
         messagePanel.gameObject.SetActive(false);
     }
