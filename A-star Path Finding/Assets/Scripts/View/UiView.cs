@@ -5,7 +5,9 @@ using UnityEngine.UI;
 public class UiView : MonoBehaviour, IUiView
 {
     [SerializeField]
-    private Button editObstaclesButton;
+    private Button addObstaclesButton;
+    [SerializeField]
+    private Button removeObstaclesButton;
     [SerializeField]
     private Button editStartPointButton;
     [SerializeField]
@@ -21,7 +23,8 @@ public class UiView : MonoBehaviour, IUiView
     [SerializeField]
     private MessagePanel messagePanel;
 
-    public event Action OnEditObstaclesPressed;
+    public event Action OnAddObstaclesPressed;
+    public event Action OnRemoveObstaclesPressed;
     public event Action OnEditStartPointPressed;
     public event Action OnEditGoalPointPressed;
     public event Action OnFindPathPressed;
@@ -31,7 +34,8 @@ public class UiView : MonoBehaviour, IUiView
 
     private void Awake()
     {
-        editObstaclesButton.onClick.AddListener(()=>OnEditObstaclesPressed?.Invoke());
+        addObstaclesButton.onClick.AddListener(()=>OnAddObstaclesPressed?.Invoke());
+        removeObstaclesButton.onClick.AddListener(() => OnRemoveObstaclesPressed?.Invoke());
         editStartPointButton.onClick.AddListener(() => OnEditStartPointPressed?.Invoke());
         editGoalPointButton.onClick.AddListener(() => OnEditGoalPointPressed?.Invoke());
         findPathButton.onClick.AddListener(() => OnFindPathPressed?.Invoke());
@@ -54,7 +58,8 @@ public class UiView : MonoBehaviour, IUiView
 
     public void EnableCleanPath()
     {
-        editObstaclesButton.interactable = false;
+        addObstaclesButton.interactable = false;
+        removeObstaclesButton.interactable = false;
         editStartPointButton.interactable = false;
         editGoalPointButton.interactable = false;
         findPathButton.interactable = false;
@@ -63,7 +68,8 @@ public class UiView : MonoBehaviour, IUiView
     
     public void ResetUiView()
     {
-        editObstaclesButton.interactable = true;
+        addObstaclesButton.interactable = true;
+        removeObstaclesButton.interactable = true;
         editStartPointButton.interactable = true;
         editGoalPointButton.interactable = true;
         findPathButton.interactable = true;

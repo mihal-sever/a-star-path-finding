@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum MapState
 {
-    EditObstacles,
+    AddObstacles,
+    RemoveObstacles,
     EditStartPoint,
     EditGoalPoint,
     ShowResult
@@ -37,7 +38,7 @@ public class MapView : MonoBehaviour, IMapView
     private void Awake()
     {
         cam = Camera.main;
-        state = MapState.EditObstacles;
+        state = MapState.AddObstacles;
         mapSize = new Vector2Int(50, 50);
         CreateMapColorSet();
     }
@@ -52,8 +53,11 @@ public class MapView : MonoBehaviour, IMapView
     {
         switch (state)
         {
-            case MapState.EditObstacles:
-                EditObstacles();
+            case MapState.AddObstacles:
+                EditObstacles(true);
+                break;
+            case MapState.RemoveObstacles:
+                EditObstacles(false);
                 break;
             case MapState.EditStartPoint:
                 EditPoint(ref startPoint, colorSet.startPointColor);
@@ -151,7 +155,7 @@ public class MapView : MonoBehaviour, IMapView
         ChangeCellColor(goalPoint, colorSet.goalPointColor);
     }
 
-    private void EditObstacles()
+    private void EditObstacles(bool isAdding)
     {
         if (!Input.GetMouseButton(0))
         {
@@ -168,10 +172,16 @@ public class MapView : MonoBehaviour, IMapView
             prevHit = hit.Value.transform;
             Vector2Int cell = GetCellCoordinates(hit.Value.point);
 
-            if (GetCellColor(cell) == colorSet.obstacleColor)
-                ChangeCellColor(cell, colorSet.walkableColor);
-            else
+            if (isAdding)
+            {
                 ChangeCellColor(cell, colorSet.obstacleColor);
+            }
+            else
+            {
+                Color cellColor = GetCellColor(cell);
+                if (cellColor != colorSet.startPointColor && cellColor != colorSet.goalPointColor)
+                    ChangeCellColor(cell, colorSet.walkableColor);
+            }
         }
     }
     

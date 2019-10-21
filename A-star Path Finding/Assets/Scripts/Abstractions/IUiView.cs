@@ -2,7 +2,8 @@
 
 public interface IUiView
 {
-    event Action OnEditObstaclesPressed;
+    event Action OnAddObstaclesPressed;
+    event Action OnRemoveObstaclesPressed;
     event Action OnEditStartPointPressed;
     event Action OnEditGoalPointPressed;
     event Action OnFindPathPressed;

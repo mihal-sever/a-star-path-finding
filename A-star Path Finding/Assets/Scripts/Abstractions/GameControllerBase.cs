@@ -19,7 +19,8 @@ public abstract class GameControllerBase
         mapModel.OnPathChanged += OnPathChanged;
 
         uiView.OnFindPathPressed += OnFindPathPressed;
-        uiView.OnEditObstaclesPressed += OnEditObstaclesPressed;
+        uiView.OnAddObstaclesPressed += OnAddObstaclesPressed;
+        uiView.OnRemoveObstaclesPressed += OnRemoveObstaclesPressed;
         uiView.OnEditStartPointPressed += OnEditStartPointPressed;
         uiView.OnEditGoalPointPressed += OnEditGoalPointPressed;
         uiView.OnClearPathPressed += OnClearPathPressed;
@@ -56,9 +57,14 @@ public abstract class GameControllerBase
         mapModel.FindPath();
     }
     
-    protected virtual void OnEditObstaclesPressed()
+    protected virtual void OnAddObstaclesPressed()
     {
-        mapView.ChangeState(MapState.EditObstacles);
+        mapView.ChangeState(MapState.AddObstacles);
+    }
+
+    protected virtual void OnRemoveObstaclesPressed()
+    {
+        mapView.ChangeState(MapState.RemoveObstacles);
     }
 
     protected virtual void OnEditStartPointPressed()
@@ -73,13 +79,13 @@ public abstract class GameControllerBase
 
     protected virtual void OnClearPathPressed()
     {
-        mapView.ChangeState(MapState.EditObstacles);
+        OnAddObstaclesPressed();
         mapView.ClearPath();
     }
 
     protected virtual void OnClearMapPressed()
     {
-        mapView.ChangeState(MapState.EditObstacles);
+        OnAddObstaclesPressed();
         mapView.ClearMap();
     }
 
