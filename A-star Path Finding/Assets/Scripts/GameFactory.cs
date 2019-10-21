@@ -6,6 +6,7 @@ public class GameFactory : MonoBehaviour
     private MapView mapView;
     [SerializeField]
     private UiView uiView;
+
     private GameControllerBase controller;
 
     private void Awake()

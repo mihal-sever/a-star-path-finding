@@ -5,7 +5,7 @@ public class MapModel : IMapModel
 {
     public event Action<List<Point>> OnPathChanged;
 
-    private Node[,] grid;
+    private int[,] grid;
     private Point startPoint;
     private Point goalPoint;
     private IPathFinder pathFinder;
@@ -21,7 +21,7 @@ public class MapModel : IMapModel
         }
     }
     
-    public void SetupMapModel(Node[,] grid, Point startPoint, Point goalPoint, IPathFinder pathFinder)
+    public void SetupMapModel(int[,] grid, Point startPoint, Point goalPoint, IPathFinder pathFinder)
     {
         this.grid = grid;
         this.startPoint = startPoint;

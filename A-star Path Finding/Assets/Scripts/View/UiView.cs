@@ -56,6 +56,16 @@ public class UiView : MonoBehaviour, IUiView
         findPathButton.interactable = false;
         clearPathButton.interactable = true;
     }
+    
+    public void ResetUiView()
+    {
+        editObstaclesButton.interactable = true;
+        editStartPointButton.interactable = true;
+        editGoalPointButton.interactable = true;
+        findPathButton.interactable = true;
+        clearMapButton.interactable = true;
+        clearPathButton.interactable = false;
+    }
 
     private void OnClearMap()
     {
@@ -67,15 +77,5 @@ public class UiView : MonoBehaviour, IUiView
     {
         ResetUiView();
         OnClearPathPressed?.Invoke();
-    }
-
-    private void ResetUiView()
-    {
-        editObstaclesButton.interactable = true;
-        editStartPointButton.interactable = true;
-        editGoalPointButton.interactable = true;
-        findPathButton.interactable = true;
-        clearMapButton.interactable = true;
-        clearPathButton.interactable = false;
     }
 }

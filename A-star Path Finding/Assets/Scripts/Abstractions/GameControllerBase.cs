@@ -19,8 +19,6 @@ public abstract class GameControllerBase
         uiView.OnEditGoalPointPressed += OnEditGoalPointPressed;
         uiView.OnClearPathPressed += OnClearPathPressed;
         uiView.OnClearMapPressed += OnClearMapPressed;
-
-        mapModel.OnPathChanged += OnPathChanged;
     }
 
     protected virtual void OnFindPathPressed()
@@ -50,6 +48,7 @@ public abstract class GameControllerBase
         if (path == null)
         {
             uiView.ShowMessage("Path has not been found.");
+            uiView.ResetUiView();
             return;
         }
 
