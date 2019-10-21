@@ -22,7 +22,7 @@ public class MapView : MonoBehaviour, IMapView
     private Vector2Int? goalPoint;
     private List<Vector2Int> path;
 
-    private const float outlineWidthInPersent = .08f;
+    private const float outlineWidthInPersent = .1f;
 
     private MapState state;
 
@@ -239,6 +239,6 @@ public class MapView : MonoBehaviour, IMapView
 
     private void CreateMapColorSet()
     {
-        colorSet = new MapColorSet(Color.white, Color.red, Color.blue, Color.green, Color.gray);
+        colorSet = new MapColorSet(Color.white, Color.red, Color.blue, Color.green, Color.yellow);
     }
 }
