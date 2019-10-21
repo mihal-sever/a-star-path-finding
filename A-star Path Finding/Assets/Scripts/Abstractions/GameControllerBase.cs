@@ -39,6 +39,7 @@ public abstract class GameControllerBase
         }
 
         List<Vector2Int> unityPath = path.Select(p => ConvertToVector2Int(p)).ToList();
+        mapView.ChangeState(MapState.ShowResult);
         mapView.DrawPath(unityPath);
     }
 
@@ -72,11 +73,13 @@ public abstract class GameControllerBase
 
     protected virtual void OnClearPathPressed()
     {
+        mapView.ChangeState(MapState.EditObstacles);
         mapView.ClearPath();
     }
 
     protected virtual void OnClearMapPressed()
     {
+        mapView.ChangeState(MapState.EditObstacles);
         mapView.ClearMap();
     }
 

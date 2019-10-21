@@ -6,7 +6,8 @@ public enum MapState
 {
     EditObstacles,
     EditStartPoint,
-    EditGoalPoint
+    EditGoalPoint,
+    ShowResult
 }
 
 
